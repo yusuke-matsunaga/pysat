@@ -1,0 +1,9 @@
+[submodule "ym-common"]
+	path = ym-common
+	url = git@github.com:yusuke-matsunaga/ym-common.git
+[submodule "ym-json"]
+	path = ym-json
+	url = git@github.com:yusuke-matsunaga/ym-json.git
+[submodule "ym-sat"]
+	path = ym-sat
+	url = git@github.com:yusuke-matsunaga/ym-sat.git
