@@ -75,6 +75,7 @@ ym_init_submodules (
 include_directories(
   ${PROJECT_BINARY_DIR}/include
   ${YM_SUBMODULE_INCLUDE_LIST}
+  ${Python3_INCLUDE_DIRS}
 )
 
 
@@ -95,6 +96,23 @@ endforeach ()
 # ===================================================================
 #  ソースファイルの設定
 # ===================================================================
+
+
+# ===================================================================
+#  executable ターゲットの設定
+# ===================================================================
+
+add_executable( pysat
+  c++-srcs/pysat.cc
+  $<TARGET_OBJECTS:py_ymsat_obj>
+  $<TARGET_OBJECTS:ym_sat_obj>
+  $<TARGET_OBJECTS:ym_json_obj>
+  )
+
+target_link_libraries ( pysat
+  ${YM_LIBDEPENDS}
+  ${Python3_LIBRARIES}
+  )
 
 
 # ===================================================================
@@ -123,6 +141,10 @@ target_link_libraries( py_ymsatlib
 # ===================================================================
 # インストールターゲット
 # ===================================================================
+
+install( TARGETS pysat
+  DESTINATION bin
+  )
 
 install( TARGETS py_ymsatlib
   LIBRARY DESTINATION lib/${YM_PYTHON_STRING}/site-packages
