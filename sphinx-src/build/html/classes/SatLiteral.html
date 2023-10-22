@@ -1,0 +1,234 @@
+
+<!DOCTYPE html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>SatLiteral クラス &#8212; pysat 1.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/translations.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="SatModel クラス" href="SatModel.html" />
+    <link rel="prev" title="SatBool3 クラス" href="SatBool3.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="SatModel.html" title="SatModel クラス"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="SatBool3.html" title="SatBool3 クラス"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pysat 1.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="classes.html" accesskey="U">クラス一覧</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">SatLiteral クラス</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="satliteral">
+<span id="id1"></span><h1>SatLiteral クラス<a class="headerlink" href="#satliteral" title="この見出しへのパーマリンク">¶</a></h1>
+<p>SAT ソルバ用の CNF 式のリテラルを表すクラス．
+具体的には変数もしくは変数の否定を表す．</p>
+<section id="id2">
+<h2>情報の取得<a class="headerlink" href="#id2" title="この見出しへのパーマリンク">¶</a></h2>
+<p>以下のコードでは <cite>x</cite>,  <cite>y</cite> は <cite>SatLiteral</cite> 型のオブジェクト
+と仮定する．</p>
+<section id="id3">
+<h3>正常値のチェック<a class="headerlink" href="#id3" title="この見出しへのパーマリンク">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">b</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">is_valid</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><cite>x</cite> が正常な値を持っている時に <cite>True</cite> を返す．</p>
+</section>
+<section id="id4">
+<h3>肯定のリテラルのチェック<a class="headerlink" href="#id4" title="この見出しへのパーマリンク">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">b</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">is_positive</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><cite>x</cite> が肯定のリテラルの場合に <cite>True</cite> を返す．</p>
+</section>
+<section id="id5">
+<h3>否定のリテラルのチェック<a class="headerlink" href="#id5" title="この見出しへのパーマリンク">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">b</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">is_negative</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><cite>x</cite> が否定のリテラルの場合に <cite>True</cite> を返す．</p>
+</section>
+<section id="id6">
+<h3>変数番号<a class="headerlink" href="#id6" title="この見出しへのパーマリンク">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vid</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">varid</span>
+</pre></div>
+</div>
+<p>変数番号は 0 以上の整数．
+ただしこれは関数ではない．</p>
+</section>
+<section id="id7">
+<h3>インデックス値<a class="headerlink" href="#id7" title="この見出しへのパーマリンク">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">index</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">index</span>
+</pre></div>
+</div>
+<p>ユニークなインデックスを返す．
+実際には変数番号を２倍して極性を表す1ビットの
+情報を加えた数値を返す．
+これも関数ではない．</p>
+</section>
+</section>
+<section id="id8">
+<h2>SatLiteral の演算<a class="headerlink" href="#id8" title="この見出しへのパーマリンク">¶</a></h2>
+<section id="id9">
+<h3>肯定のリテラルへ変換する<a class="headerlink" href="#id9" title="この見出しへのパーマリンク">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">make_positive</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><cite>y</cite> は <cite>x</cite> と同じ変数の肯定のリテラルとなる．
+<cite>x</cite> が肯定のリテラルの場合，<cite>y</cite> は <cite>x</cite> と等しくなる．
+<cite>x</cite> が否定のリテラルの場合，<cite>y</cite> は <cite>x</cite> を反転したものとなる．</p>
+</section>
+<section id="id10">
+<h3>否定のリテラルへ変換する<a class="headerlink" href="#id10" title="この見出しへのパーマリンク">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">make_negative</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><cite>y</cite> は <cite>x</cite> と同じ変数の否定のリテラルとなる．
+<cite>x</cite> が否定のリテラルの場合，<cite>y</cite> は <cite>x</cite> と等しくなる．
+<cite>x</cite> が肯定のリテラルの場合，<cite>y</cite> は <cite>x</cite> を反転したものとなる．</p>
+</section>
+<section id="id11">
+<h3>極性を反転する<a class="headerlink" href="#id11" title="この見出しへのパーマリンク">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">y</span> <span class="o">=</span> <span class="o">~</span><span class="n">x</span>
+</pre></div>
+</div>
+</section>
+<section id="id12">
+<h3>極性を結合する<a class="headerlink" href="#id12" title="この見出しへのパーマリンク">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">p</span>
+</pre></div>
+</div>
+<p><cite>p</cite> を Python のブール値に変換して <cite>True</cite> の場合，
+<cite>x</cite> の極性を反転させる．
+そうでなければ <cite>x</cite> のまま．</p>
+</section>
+<section id="id13">
+<h3>等価比較<a class="headerlink" href="#id13" title="この見出しへのパーマリンク">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><cite>x</cite> と <cite>y</cite> が等しい時 <cite>b</cite> に <cite>True</cite> が代入される．</p>
+</section>
+<section id="id14">
+<h3>非透過比較<a class="headerlink" href="#id14" title="この見出しへのパーマリンク">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">!=</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><cite>x</cite> と <cite>y</cite> が等しくない時 <cite>b</cite> に <cite>True</cite> が代入される．</p>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">SatLiteral クラス</a><ul>
+<li><a class="reference internal" href="#id2">情報の取得</a><ul>
+<li><a class="reference internal" href="#id3">正常値のチェック</a></li>
+<li><a class="reference internal" href="#id4">肯定のリテラルのチェック</a></li>
+<li><a class="reference internal" href="#id5">否定のリテラルのチェック</a></li>
+<li><a class="reference internal" href="#id6">変数番号</a></li>
+<li><a class="reference internal" href="#id7">インデックス値</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id8">SatLiteral の演算</a><ul>
+<li><a class="reference internal" href="#id9">肯定のリテラルへ変換する</a></li>
+<li><a class="reference internal" href="#id10">否定のリテラルへ変換する</a></li>
+<li><a class="reference internal" href="#id11">極性を反転する</a></li>
+<li><a class="reference internal" href="#id12">極性を結合する</a></li>
+<li><a class="reference internal" href="#id13">等価比較</a></li>
+<li><a class="reference internal" href="#id14">非透過比較</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="SatBool3.html"
+                          title="前の章へ">SatBool3 クラス</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="SatModel.html"
+                          title="次の章へ">SatModel クラス</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/classes/SatLiteral.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="SatModel.html" title="SatModel クラス"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="SatBool3.html" title="SatBool3 クラス"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pysat 1.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="classes.html" >クラス一覧</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">SatLiteral クラス</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2023, Yusuke Matsunaga(松永 裕介).
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    </div>
+  </body>
+</html>

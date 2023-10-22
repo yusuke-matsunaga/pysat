@@ -1,0 +1,219 @@
+
+<!DOCTYPE html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>SatBool3 クラス &#8212; pysat 1.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/translations.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="SatLiteral クラス" href="SatLiteral.html" />
+    <link rel="prev" title="クラス一覧" href="classes.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="SatLiteral.html" title="SatLiteral クラス"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="classes.html" title="クラス一覧"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pysat 1.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="classes.html" accesskey="U">クラス一覧</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">SatBool3 クラス</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="satbool3">
+<span id="id1"></span><h1>SatBool3 クラス<a class="headerlink" href="#satbool3" title="この見出しへのパーマリンク">¶</a></h1>
+<p>SAT ソルバ上のブール値を表すクラス．
+通常ブール値は <cite>True</cite> と <cite>False</cite> の２値だが，
+ここでは不定を表す X を含めて3値としている．</p>
+<table class="docutils align-left">
+<thead>
+<tr class="row-odd"><th class="head"><p>値</p></th>
+<th class="head"><p>文字列表現</p></th>
+<th class="head"><p>意味</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>SatBool3.true</p></td>
+<td><p>&quot;true&quot;</p></td>
+<td><p>真</p></td>
+</tr>
+<tr class="row-odd"><td><p>SatBool3.false</p></td>
+<td><p>&quot;false&quot;</p></td>
+<td><p>偽</p></td>
+</tr>
+<tr class="row-even"><td><p>SatBool3.x</p></td>
+<td><p>&quot;x&quot;</p></td>
+<td><p>不定</p></td>
+</tr>
+</tbody>
+</table>
+<section id="id2">
+<h2>SatBool3 の演算<a class="headerlink" href="#id2" title="この見出しへのパーマリンク">¶</a></h2>
+<p>以下の例の <cite>v1</cite>, <cite>v2</cite>, <cite>v3</cite>
+はそれぞれ <cite>SatBool3</cite> 型のオブジェクトとする．</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">v2</span> <span class="o">=</span> <span class="o">~</span><span class="n">v1</span>
+</pre></div>
+</div>
+<p>反対の値を返す．
+ただし， <cite>SatBool3.x</cite> に対しては <cite>SatBool3.x</cite> を返す．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">v3</span> <span class="o">=</span> <span class="n">v1</span> <span class="o">*</span> <span class="n">v2</span>
+</pre></div>
+</div>
+<p>ブール代数的には排他的論理和の演算を行う．真理値表は以下の通り．</p>
+<table class="docutils align-left">
+<thead>
+<tr class="row-odd"><th class="head"><p><cite>*</cite></p></th>
+<th class="head"><p>&quot;true&quot;</p></th>
+<th class="head"><p>&quot;false&quot;</p></th>
+<th class="head"><p>&quot;x&quot;</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>&quot;true&quot;</p></td>
+<td><p>&quot;true&quot;</p></td>
+<td><p>&quot;false&quot;</p></td>
+<td><p>&quot;x&quot;</p></td>
+</tr>
+<tr class="row-odd"><td><p>&quot;false&quot;</p></td>
+<td><p>&quot;false&quot;</p></td>
+<td><p>&quot;true&quot;</p></td>
+<td><p>&quot;x&quot;</p></td>
+</tr>
+<tr class="row-even"><td><p>&quot;x&quot;</p></td>
+<td><p>&quot;x&quot;</p></td>
+<td><p>&quot;x&quot;</p></td>
+<td><p>&quot;x&quot;</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">v1</span> <span class="o">*=</span> <span class="n">v2</span>
+</pre></div>
+</div>
+<p>上記の演算の自己代入形．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">v1</span> <span class="o">==</span> <span class="n">v2</span>
+</pre></div>
+</div>
+<p>等価比較演算を行う． <cite>v1</cite> と <cite>v2</cite> が等しい時 <cite>True</cite> を返す．
+<cite>x</cite> と <cite>x</cite> も等しいとみなす．
+演算結果は <cite>SatBool3</cite> ではなく Python のブール値であることに注意</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">v1</span> <span class="o">!=</span> <span class="n">v2</span>
+</pre></div>
+</div>
+<p>非等価比較演算を行う． <cite>v1</cite> と <cite>v2</cite> が等しくない時 <cite>True</cite> を返す．
+演算結果は <cite>SatBool3</cite> ではなく Python のブール値であることに注意</p>
+</section>
+<section id="id3">
+<h2><cite>SatBool3</cite> のオブジェクト生成<a class="headerlink" href="#id3" title="この見出しへのパーマリンク">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">v_true</span> <span class="o">=</span> <span class="n">SatBool3</span><span class="p">(</span><span class="s2">&quot;true&quot;</span><span class="p">)</span>
+<span class="n">v_true</span> <span class="o">==</span> <span class="n">SatBool3</span><span class="o">.</span><span class="n">true</span>
+
+<span class="n">v_false</span> <span class="o">=</span> <span class="n">SatBool3</span><span class="p">(</span><span class="s2">&quot;false&quot;</span><span class="p">)</span>
+<span class="n">v_false</span> <span class="o">==</span> <span class="n">SatBool3</span><span class="o">.</span><span class="n">false</span>
+
+<span class="n">v_x</span> <span class="o">=</span> <span class="n">SatBool3</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+<span class="n">v_x</span> <span class="o">==</span> <span class="n">SatBool3</span><span class="o">.</span><span class="n">x</span>
+</pre></div>
+</div>
+<p>この様に文字列から <cite>SatBool3</cite> のオブジェクトを生成することができる．
+実はこの文字列は大文字小文字を区別しないので <cite>SatBool3(&quot;TRUE&quot;)</cite>
+でも <cite>SatBool3.true</cite> を生成する．</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">SatBool3 クラス</a><ul>
+<li><a class="reference internal" href="#id2">SatBool3 の演算</a></li>
+<li><a class="reference internal" href="#id3"><cite>SatBool3</cite> のオブジェクト生成</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="classes.html"
+                          title="前の章へ">クラス一覧</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="SatLiteral.html"
+                          title="次の章へ">SatLiteral クラス</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/classes/SatBool3.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="SatLiteral.html" title="SatLiteral クラス"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="classes.html" title="クラス一覧"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pysat 1.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="classes.html" >クラス一覧</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">SatBool3 クラス</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2023, Yusuke Matsunaga(松永 裕介).
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    </div>
+  </body>
+</html>

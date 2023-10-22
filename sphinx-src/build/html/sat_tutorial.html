@@ -1,0 +1,246 @@
+
+<!DOCTYPE html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>pysat の使い方 &#8212; pysat 1.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/translations.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="クラス一覧" href="classes/classes.html" />
+    <link rel="prev" title="pysat の取得，ビルド，インストール" href="how_to_build.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="classes/classes.html" title="クラス一覧"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="how_to_build.html" title="pysat の取得，ビルド，インストール"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pysat 1.0 ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">pysat の使い方</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="pysat">
+<span id="sat-tutorial"></span><h1>pysat の使い方<a class="headerlink" href="#pysat" title="この見出しへのパーマリンク">¶</a></h1>
+<section id="id1">
+<h2>pysat とは<a class="headerlink" href="#id1" title="この見出しへのパーマリンク">¶</a></h2>
+<p>pysat は <cite>python</cite> から SAT ソルバを使えるようにするための拡張モジュールである．</p>
+<p>具体的には <cite>ymsat</cite> という名前の動的ライブラリを提供している．
+<cite>python</cite> のモジュール検索パスに含まれる適切なディレクトリにこの動的ラ
+イブラリを置くことによって <cite>import ymsat</cite> で <cite>ymsat</cite> が使用可能となる．
+また，あらかじめ <cite>ymsat</cite> を組み込んだ <cite>python</cite> インタプリタとして
+<cite>pysat</cite> というバイナリプログラムも提供している．
+こちらは動的なモジュール検索パスの設定は必要なく， <cite>import ymsat</cite>
+を実行することができる．</p>
+<p>以下の説明は通常の <cite>python</cite> に動的に <cite>ymsat</cite> モジュールを読み込んだ
+場合と <cite>pysat</cite> を実行した場合のどちらでも同一の結果を得ることができる．
+なお，プログラムの先頭に以下の記述があるものとする．</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ymsat</span> <span class="kn">import</span> <span class="n">SatBool3</span><span class="p">,</span> <span class="n">SatSolver</span>
+</pre></div>
+</div>
+</section>
+<section id="sat">
+<h2>簡単な SAT 問題を解く<a class="headerlink" href="#sat" title="この見出しへのパーマリンク">¶</a></h2>
+<section id="id2">
+<h3>ソルバの生成<a class="headerlink" href="#id2" title="この見出しへのパーマリンク">¶</a></h3>
+<p>ここで， <span class="math notranslate nohighlight">\((\neg v_1 \vee \neg v_2) \wedge (v_2 \vee \neg v_3) \wedge (v_1 \vee v_3)\)</span>
+というSAT問題を解くことを考える．
+そのためにはまず SATソルバのインスタンスを生成する必要がある．</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">solver</span> <span class="o">=</span> <span class="n">SatSolver</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><cite>solver</cite> は <cite>SatSolver</cite> 型(<a class="reference internal" href="classes/SatSolver.html#satsolver"><span class="std std-ref">SatSolver クラス</span></a>)のオブジェクトである．</p>
+</section>
+<section id="id3">
+<h3>変数の割り当て<a class="headerlink" href="#id3" title="この見出しへのパーマリンク">¶</a></h3>
+<p>次に論理式を記述するための変数の割り当てを行う．
+変数は内部ではただの整数で表されるが，
+SATソルバの内部で必要な処理があるため，
+適当な数字を勝手に使うことはできない．
+そこで以下のように変数を割り当てる．</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">v1</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">new_variable</span><span class="p">()</span>
+<span class="n">v2</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">new_variable</span><span class="p">()</span>
+<span class="n">v3</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">new_variable</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><cite>SatSolver.new_variable()</cite> は <cite>SatLiteral</cite> 型(<a class="reference internal" href="classes/SatLiteral.html#satliteral"><span class="std std-ref">SatLiteral クラス</span></a>)のオブジェクトを返す．
+これは変数そのものではなく，変数の肯定を表すリテラルであることに注意．
+変数そのものを表すオブジェクトは存在しない．
+なお，<cite>v1</cite> などの <cite>python</cite> 上の変数名は SATソルバに対してはなんの意味
+も持たない． <cite>v1</cite> の代わりに <cite>x</cite> を用いても結果は全く同じである．</p>
+</section>
+<section id="id4">
+<h3>問題(論理式)の作成<a class="headerlink" href="#id4" title="この見出しへのパーマリンク">¶</a></h3>
+<p>一般に SATソルバは問題を内部に保持しておく形式をとる場合が多い．
+これは問題に対する解析情報も内部で保持しておくことで効率的な
+処理を行うためである．
+そのため，SAT問題という別の型のオブジェクトは存在せず，
+SATソルバに対して問題(の部品であるCNF節)を追加していくことになる．</p>
+<p>前述の論理式を追加するプログラムは以下のようになる．</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">solver</span><span class="o">.</span><span class="n">add_clause</span><span class="p">(</span><span class="o">~</span><span class="n">v1</span><span class="p">,</span> <span class="o">~</span><span class="n">v2</span><span class="p">)</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add_clause</span><span class="p">(</span><span class="n">v2</span><span class="p">,</span> <span class="o">~</span><span class="n">v3</span><span class="p">)</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add_clause</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><cite>SatSolver.add_clause()</cite> の詳細な使い方に関しては <a class="reference internal" href="classes/SatSolver.html#satsolver"><span class="std std-ref">SatSolver クラス</span></a> を
+参照せよ．</p>
+</section>
+<section id="id5">
+<h3>SAT問題を解く<a class="headerlink" href="#id5" title="この見出しへのパーマリンク">¶</a></h3>
+<p>問題を設定したら最後に解を求める．</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ans</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>この問題は充足可能なので <cite>ans = SatBool3.true</cite> となる．
+結果が充足可能だった場合，充足解の一つを取り出すことができる．</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">model</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><cite>model</cite> は <cite>SatModel</cite> 型(<a class="reference internal" href="classes/SatModel.html#satmodel"><span class="std std-ref">SatModel クラス</span></a>)のオブジェクトである．
+<cite>v1, v2, v3</cite> に対する値の割り当て結果は以下のように取り出すことができる．</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ans_v1</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="n">v1</span><span class="p">]</span>
+<span class="n">ans_v2</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="n">v2</span><span class="p">]</span>
+<span class="n">ans_v3</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="n">v3</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>なお，<cite>SatSolver.model()</cite> では全ての変数に対する割り当て結果をコピーす
+るので一部の変数割り当ての結果だけを調べる場合には効率的ではない．
+その場合は <cite>SatSolver.read_model()</cite> を用いる．
+以下のコードは上のコードと同一の結果を得る．</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ans_v1</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">read_model</span><span class="p">(</span><span class="n">v1</span><span class="p">)</span>
+<span class="n">ans_v2</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">read_model</span><span class="p">(</span><span class="n">v2</span><span class="p">)</span>
+<span class="n">ans_v3</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">read_model</span><span class="p">(</span><span class="n">v3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>ただし，<cite>SatSolver.solve()</cite> が呼ばれると以前の結果はクリアされるので
+注意が必要である．
+過去の割り当て結果が必要なら <cite>SatSolver.model()</cite> を使って結果をコピー
+する必要がある．</p>
+<p>SAT問題を解く際に一部(もしくは全部)の変数の値を固定することができる．
+このような値の割り当てを assumptions と呼ぶ．
+assumptions を与えるには <cite>SatSolver.solve()</cite> の引数に
+<cite>SatLiteral</cite> のリストを与えればよい．</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ans2</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">solve</span><span class="p">([</span><span class="n">v1</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>この例では上と同じ問題に対して <span class="math notranslate nohighlight">\(v_1 = true\)</span> となる割り当て
+を与えて解を求めている．</p>
+</section>
+<section id="id6">
+<h3>別の問題を解く<a class="headerlink" href="#id6" title="この見出しへのパーマリンク">¶</a></h3>
+<p>前述の通りSATソルバは内部で現在解いている問題の解析情報を保持している
+ため，
+別の問題を解く場合には別の <cite>SatSolver</cite> オブジェクトを生成する必要があ
+る．
+ただし，前述の通り，同じ問題に対して assumptions を変更して解く場合は
+同一のSATソルバを使うことができる．
+また，現在の問題に対して新たな節(論理式)を追加して新しい問題にする場合
+も同一のSATソルバを使うことができる．
+ただし，一度追加した節を削除することはできない．</p>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">pysat の使い方</a><ul>
+<li><a class="reference internal" href="#id1">pysat とは</a></li>
+<li><a class="reference internal" href="#sat">簡単な SAT 問題を解く</a><ul>
+<li><a class="reference internal" href="#id2">ソルバの生成</a></li>
+<li><a class="reference internal" href="#id3">変数の割り当て</a></li>
+<li><a class="reference internal" href="#id4">問題(論理式)の作成</a></li>
+<li><a class="reference internal" href="#id5">SAT問題を解く</a></li>
+<li><a class="reference internal" href="#id6">別の問題を解く</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="how_to_build.html"
+                          title="前の章へ">pysat の取得，ビルド，インストール</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="classes/classes.html"
+                          title="次の章へ">クラス一覧</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/sat_tutorial.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="classes/classes.html" title="クラス一覧"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="how_to_build.html" title="pysat の取得，ビルド，インストール"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pysat 1.0 ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">pysat の使い方</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2023, Yusuke Matsunaga(松永 裕介).
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    </div>
+  </body>
+</html>

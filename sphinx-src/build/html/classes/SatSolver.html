@@ -1,0 +1,516 @@
+
+<!DOCTYPE html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>SatSolver クラス &#8212; pysat 1.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/translations.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="prev" title="SatModel クラス" href="SatModel.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="SatModel.html" title="SatModel クラス"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pysat 1.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="classes.html" accesskey="U">クラス一覧</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">SatSolver クラス</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="satsolver">
+<span id="id1"></span><h1>SatSolver クラス<a class="headerlink" href="#satsolver" title="この見出しへのパーマリンク">¶</a></h1>
+<p>SAT ソルバを表すクラス．
+一般に SAT ソルバは内部に現在実行中の SAT 問題を表す CNF とそれに付随
+した情報を持つ．
+そのため，一つのソルバを使って異なる複数の問題を解くことはできない．
+ただし，現在の問題に対して節を追加することはできる．
+既に追加した節をあとから削除することはできない．</p>
+<section id="id2">
+<h2>SatSolver の生成<a class="headerlink" href="#id2" title="この見出しへのパーマリンク">¶</a></h2>
+<p>生成方法にはいくつかのパタンがある．</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">solver</span> <span class="o">=</span> <span class="n">SatSolver</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>デフォルトタイプのソルバを生成する．
+デフォルトタイプの指定方法は少し複雑なので後述する．</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">solver</span> <span class="o">=</span> <span class="n">SatSolver</span><span class="p">(</span><span class="s1">&#39;ymsat2&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>ソルバの種類を表す文字列を指定したパタン．
+現在使用可能はタイプは以下の通り．</p>
+<table class="docutils align-left">
+<thead>
+<tr class="row-odd"><th class="head"><p>文字列</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>minisat</p></td>
+<td><p>MiniSat</p></td>
+</tr>
+<tr class="row-odd"><td><p>minisat2</p></td>
+<td><p>MiniSat2</p></td>
+</tr>
+<tr class="row-even"><td><p>glueminisat2</p></td>
+<td><p>glueminisat2</p></td>
+</tr>
+<tr class="row-odd"><td><p>lingeling</p></td>
+<td><p>lingeling</p></td>
+</tr>
+<tr class="row-even"><td><p>ymsat2</p></td>
+<td><p>自作のSATソルバ</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">init_param</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nb">type</span><span class="p">:</span> <span class="s1">&#39;ymsat2&#39;</span><span class="p">,</span>
+  <span class="n">controller</span><span class="p">:</span> <span class="s1">&#39;minisat2&#39;</span><span class="p">,</span>
+  <span class="n">analyzer</span><span class="p">:</span> <span class="s1">&#39;uip2&#39;</span><span class="p">,</span>
+  <span class="n">selector</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nb">type</span><span class="p">:</span> <span class="s1">&#39;nega&#39;</span><span class="p">,</span>
+    <span class="n">phase_cache</span><span class="p">:</span> <span class="n">true</span>
+  <span class="p">}</span><span class="n">l</span>
+<span class="p">}</span>
+
+<span class="n">solver</span> <span class="o">=</span> <span class="n">SatSolver</span><span class="p">(</span><span class="n">init_param</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>初期化パラメータを表す辞書(dict)を引数として与えるパタン．
+細かな設定を行うことができる．
+使用可能な項目はソルバのタイプごとに異なる．</p>
+<section id="id3">
+<h3>デフォルトタイプの詳細<a class="headerlink" href="#id3" title="この見出しへのパーマリンク">¶</a></h3>
+<p>引数を与えずに <cite>SatSolver</cite> を生成する場合，
+以下のアルゴリズムで初期化パラメータの設定を行う．</p>
+<ol class="arabic">
+<li><p>環境変数 <cite>YMSAT_CONF</cite> を参照する．
+<cite>YMSAT_CONF</cite> が設定されている場合，
+その値を設定用の JSON ファイルとみなして
+読み込む．読み込んだ結果の辞書を引数として
+<cite>SatSolver</cite> を生成する．</p>
+<p>読み込みが失敗した場合や環境変数が未設定の場合，
+次へスキップする．</p>
+</li>
+<li><p>環境変数 <cite>YMSAT_CONFDIR</cite> を参照する．
+<cite>YMSAT_CONFDIR</cite> が設定されている場合，
+${YMSAT_CONFDIR}/ymsat.json を設定用JSONファイルと
+みなして読み込む．</p>
+<p>読み込みが失敗した場合や環境変数が未設定の場合，
+次へスキップする．</p>
+</li>
+<li><p>カレントディレクトリの ymsat.json ファイルを読み込む．</p>
+<p>読み込んだ結果を初期化パラメータとして用いる．</p>
+<p>読み込みが失敗した場合やファイルが存在しない場合は
+次へスキップする．</p>
+</li>
+<li><p>ハードコードされたデフォルト値を用いる．</p>
+<p>現時点では { type: 'ymsat2'} を用いる．</p>
+</li>
+</ol>
+</section>
+</section>
+<section id="id4">
+<h2>変数の生成<a class="headerlink" href="#id4" title="この見出しへのパーマリンク">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">v1</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">new_variable</span><span class="p">()</span>
+<span class="n">v2</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">new_variable</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>論理式中で用いる変数を生成する．
+実際に返されるのはその変数の肯定のリテラルを表す
+<cite>SatLiteral</cite> (<a class="reference internal" href="SatLiteral.html#satliteral"><span class="std std-ref">SatLiteral クラス</span></a>) のインスタンスである．
+変数そのものを表すクラスは存在しない．
+変数は decision variable かどうかのフラグを持つ．
+引数としてブール値を与えた場合にはその値が decision variable
+フラグの値となる．
+引数を省略した場合のデフォルト値は <cite>True</cite> である．</p>
+<p>decision variable の指定がない変数はソルバ内部で最適化が行われる際に
+削除される可能性がある．
+そのため結果のモデル(<cite>SatModel</cite> (<a class="reference internal" href="SatModel.html#satmodel"><span class="std std-ref">SatModel クラス</span></a>))から値を取り出すことができない．</p>
+<p>ただし，ソルバタイプによってはこの decision variable の指定が意味を
+持たない場合もある．</p>
+</section>
+<section id="id5">
+<h2>節の生成<a class="headerlink" href="#id5" title="この見出しへのパーマリンク">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">solver</span><span class="o">.</span><span class="n">add_clause</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="o">~</span><span class="n">v2</span><span class="p">,</span> <span class="n">v3</span><span class="p">)</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add_clause</span><span class="p">([</span><span class="n">v1</span><span class="p">,</span> <span class="o">~</span><span class="n">v2</span><span class="p">,</span> <span class="n">v3</span><span class="p">])</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add_clause</span><span class="p">([</span><span class="n">v1</span><span class="p">,</span> <span class="o">~</span><span class="n">v2</span><span class="p">],</span> <span class="n">v3</span><span class="p">)</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add_clause</span><span class="p">((</span><span class="n">v1</span><span class="p">,</span> <span class="o">~</span><span class="n">v2</span><span class="p">,</span> <span class="n">v3</span><span class="p">))</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add_clause</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="p">(</span><span class="o">~</span><span class="n">v2</span><span class="p">,</span> <span class="n">v3</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>のようにリテラルのリスト(集合)を引数に与える．
+上の5つの文はすべて <span class="math notranslate nohighlight">\((v_1 \vee \neg v_2 \vee v_3)\)</span>
+を表す CNF 節を追加する．
+このように引数解釈は柔軟にしてあり，最終的にリテラルのリスト(集合)
+と考えられるものであればなんでもよい．
+より詳細には 'シーケンス型' であればなんでもよい．</p>
+</section>
+<section id="sat">
+<h2>SAT問題を解く<a class="headerlink" href="#sat" title="この見出しへのパーマリンク">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ans</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>で今までに追加された CNF 節の集合を一つのSAT問題とみなして
+解を求める．
+ans は <cite>SatBool3</cite> (<a class="reference internal" href="SatBool3.html#satbool3"><span class="std std-ref">SatBool3 クラス</span></a>) 型のインスタンスで
+<cite>SatBool3.true</cite> で SAT(充足可能)，
+<cite>SatBool3.false</cite> で UNSAT(充足不能)，
+<cite>SatBool3.x</cite> で不明を表す．
+通常は <cite>true</cite> か <cite>false</cite> となる．<cite>x</cite> になるのは途中で
+計算を打ち切った時のみ．</p>
+<p>問題を解く際にあらかじめいくつかの変数に値を割り当てておく場合
+がある．このような値の割り当てを assumptions と呼ぶ．
+assumptions はリテラルのリストの形で与える．
+こちらも <cite>add_clause</cite> 同様に柔軟に引き数の解釈を行うことが可能となって
+いる．</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ans</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">solve</span><span class="p">((</span><span class="o">~</span><span class="n">v1</span><span class="p">,</span> <span class="n">v3</span><span class="p">))</span>
+<span class="n">ans</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">assumptions</span><span class="o">=</span><span class="p">[</span><span class="o">~</span><span class="n">v1</span><span class="p">,</span> <span class="n">v3</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>assumptions は 0 番目の省略可能位置引数であるが，
+<cite>assumptions</cite> というキーワードでも指定可能となっている．
+上の２つの文は同じ意味を持つ．
+<cite>add_clause</cite> の場合と違って <cite>solve(~v1, v3)</cite> とはできないことに注意．
+(assumptions は一つの引数でなければならない)．</p>
+<p>ソルバタイプによっては計算時間に制限をもたせることができる．
+制限時間はキーワード引数 <cite>time_limit</cite> で与える(単位は秒)．</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ans</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">time_limit</span><span class="o">=</span><span class="mi">3600</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>制限時間に達して計算が打ち切られた場合，<cite>ans</cite> は <cite>SatBool3.x</cite>
+となっている．</p>
+<section id="id6">
+<h3>解の取得<a class="headerlink" href="#id6" title="この見出しへのパーマリンク">¶</a></h3>
+<p>SAT問題が充足可能だった場合，
+充足可能な割り当ては以下の文で得ることができる．</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">model</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><cite>model</cite> は <cite>SatModel</cite> (<a class="reference internal" href="SatModel.html#satmodel"><span class="std std-ref">SatModel クラス</span></a>) のインスタンスである．
+ただし，この関数ではソルバが持っている全ての変数に対する
+割り当て結果の複製を行うため，いくつかの変数の値を調べる
+場合にはあまり効率がよいとは言えない．
+そこで以下のように一つ一つの変数の割り当て結果を調べることができる．</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">val1</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">read_model</span><span class="p">(</span><span class="n">v1</span><span class="p">)</span>
+<span class="n">val2</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">read_model</span><span class="p">(</span><span class="o">~</span><span class="n">v2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>この例ではリテラル <cite>v1</cite> と <cite>~v2</cite> に対する値の割り当て結果をそれぞれ
+<cite>val1</cite> と <cite>val2</cite> に格納している．
+このように否定のリテラルに対する値も得ることができる．
+(結果は肯定のリテラルの結果を否定したものとなる)．</p>
+<p><cite>read_model()</cite> は次の <cite>solve()</cite> が呼び出されると無効となるので注意．
+以前の結果を保持しておきたい場合には <cite>model()</cite> を使って結果のコピーを
+作成しておく必要がある．</p>
+</section>
+<section id="id7">
+<h3>矛盾の原因の解析<a class="headerlink" href="#id7" title="この見出しへのパーマリンク">¶</a></h3>
+<p>assumptions 付きのSAT問題が充足不能だった場合，
+矛盾の原因となっている assumptions の部分集合を得ることができる．</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">conf_lits</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">conflict_literals</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><cite>conf_lits</cite> には <cite>SatLiteral</cite> のリストが格納される．</p>
+</section>
+</section>
+<section id="id8">
+<h2>高度な使い方<a class="headerlink" href="#id8" title="この見出しへのパーマリンク">¶</a></h2>
+<p><cite>SatSolver</cite> に与える問題は基本的にCNFの形に直して節ごとに追加する必要がある．
+任意の論理式はCNFの形に変形できる(正確には充足等価なCNFに変換できる)こ
+とが知られているのでこの事自体は問題ではないが，
+その度にCNFに変換する処理を行うのは効率が悪い．
+そこで，よく使うパタンの論理式をCNFに変換して追加する機能を
+<cite>SatSolver</cite> に用意している．</p>
+<section id="tseitin">
+<h3>Tseitin の符号化<a class="headerlink" href="#tseitin" title="この見出しへのパーマリンク">¶</a></h3>
+<p>Tseitin の符号化として知られる一般の論理式(もしくは論理ゲート)をCNFに
+変換する．
+以下， <cite>x1, x2, ... y</cite> は <cite>SatLiteral</cite> のオブジェクトであるものとする．</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># y = x1</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add_buffgate</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x1</span><span class="p">)</span>
+
+<span class="c1"># y = ~x1</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add_notgate</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x1</span><span class="p">)</span>
+
+<span class="c1"># y = x1 &amp; x2</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add_andgate</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">)</span>
+
+<span class="c1"># y = ~(x1 &amp; x2)</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add_nandgate</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">)</span>
+
+<span class="c1"># y = x1 | x2</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add_orgate</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">)</span>
+
+<span class="c1"># y = ~(x1 | x2)</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add_norgate</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">)</span>
+
+<span class="c1"># y = x1 ^ x2</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add_xorgate</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">)</span>
+
+<span class="c1"># y = ~(x1 ^ x2)</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add_xnorgate</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>順に，バッファ，インバータ(NOTゲート)，ANDゲート，
+NANDゲート，ORゲート，NORゲート，XORゲート，XNORゲート
+の入力と出力の関係を表すCNFを追加する．
+なお，最初の引数は出力のリテラルを表す．
+残りの引数は上述のコードのように個別に与えてもよいし，
+<cite>SatSolver.add_clause</cite> のようにリストの形で与えても良い．
+例えば次のようなコードでも正しく動く．</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">solver</span><span class="o">.</span><span class="n">add_andgate</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="p">[</span><span class="n">x2</span><span class="p">,</span> <span class="n">x3</span><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+<section id="id9">
+<h3>加算<a class="headerlink" href="#id9" title="この見出しへのパーマリンク">¶</a></h3>
+<p>複数の変数を２進符号化されたビットベクトルとみなして加算を行う
+回路の入出力の関係を表すCNFを追加する．</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1ビット半加算器</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add_half_adder</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">cout</span><span class="p">)</span>
+
+<span class="c1"># 1ビット全加算器</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add_full_adder</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">cin</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">cout</span><span class="p">)</span>
+
+<span class="c1"># 加算器</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add_adder</span><span class="p">(</span><span class="n">a_list</span><span class="p">,</span> <span class="n">b_list</span><span class="p">,</span> <span class="n">cin</span><span class="p">,</span> <span class="n">s_list</span><span class="p">,</span> <span class="n">cout</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><cite>a, b, s, cin, cout</cite> は <cite>SatLiteral</cite> である．
+<cite>a_list, b_list, s_lsit</cite> は <cite>SatLiteral</cite> のリストで，
+その要素数は一致していなければならない．
+<cite>a(a_list)</cite> と <cite>b(b_list)</cite> が入力のリテラル．
+<cite>cin</cite> がキャリー入力，<cite>s(s_list)</cite> が出力のリテラル，
+<cite>cout</cite> がキャリー出力を表す．</p>
+</section>
+<section id="id10">
+<h3>カウント<a class="headerlink" href="#id10" title="この見出しへのパーマリンク">¶</a></h3>
+<p>対象の変数のうち <cite>1(True)</cite> となっているものの数を数える回路の入力と出
+力の関係を表すCNFを追加する．</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">o_lits</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">add_counter</span><span class="p">(</span><span class="n">i_lits</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><cite>ilits</cite> および <cite>o_lits</cite> は <cite>SatLiteral</cite> のリストである．
+それぞれ，入力のリテラル，出力のリテラルを表す．
+いままでのメンバ関数と異なり出力のリテラルを引数として与えるのではない
+ことに注意．
+これは入力の要素数に応じて必要となる出力のビット数が異なるため，
+外部でそのビット数を計算を行う手間を省くためである．
+そのためこの関数内部で <cite>SatSolver.new_variable()</cite> が呼ばれることになる．</p>
+</section>
+<section id="id11">
+<h3>カウント系の条件<a class="headerlink" href="#id11" title="この見出しへのパーマリンク">¶</a></h3>
+<p>対象の変数のうち <cite>1(True)</cite> となっているものの数に関する条件を表すCNF
+を追加する．</p>
+<p>以下では <cite>x1, x2, x3</cite> は <cite>SatLiteral</cite> のオブジェクト，
+<cite>k</cite> は整数とする．</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># x1, x2, x3 のうち 1 になる物の数が高々1</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add_at_most_one</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">x3</span><span class="p">)</span>
+
+<span class="c1"># x1, x2, x3 のうち 1 になる物の数が高々2</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add_at_most_two</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">x3</span><span class="p">)</span>
+
+<span class="c1"># x1, x2, x3 のうち 1 になる物の数が高々k</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add_at_most_k</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">x3</span><span class="p">)</span>
+
+<span class="c1"># x1, x2, x3 のうち 1 になる物の数が少なくとも1</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add_at_least_one</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">x3</span><span class="p">)</span>
+
+<span class="c1"># x1, x2, x3 のうち 1 になる物の数が少なくとも2</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add_at_least_two</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">x3</span><span class="p">)</span>
+
+<span class="c1"># x1, x2, x3 のうち 1 になる物の数が少なくともk</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add_at_least_k</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">x3</span><span class="p">)</span>
+
+<span class="c1"># x1, x2, x3 のうち 1 になる物の数がちょうど1</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add_exact_one</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">x3</span><span class="p">)</span>
+
+<span class="c1"># x1, x2, x3 のうち 1 になる物の数がちょうど2</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add_exact_two</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">x3</span><span class="p">)</span>
+
+<span class="c1"># x1, x2, x3 のうち 1 になる物の数がちょうどk</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add_exact_k</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">x3</span><span class="p">)</span>
+
+<span class="c1"># x1, x2, x3 のうち 1 になるの物の数が 1 でない．</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add_not_none</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">x3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><cite>SatSolver.add_clause()</cite> と同様に複数の <cite>SatLiteral</cite>
+はリストにしてもよいし，個々の引数にしてもよい．</p>
+</section>
+<section id="id12">
+<h3>比較演算<a class="headerlink" href="#id12" title="この見出しへのパーマリンク">¶</a></h3>
+<p>複数の変数を2進符号化されたビットベクタとみなして比較を行う．</p>
+<p><cite>a_list, b_list</cite> は <cite>SatLiteral</cite> のリストとする．</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># a_list と b_list が等しい(=)．</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add_eq</span><span class="p">(</span><span class="n">a_list</span><span class="p">,</span> <span class="n">b_list</span><span class="p">)</span>
+
+<span class="c1"># a_list と b_list が等しくない(!=)．</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add_ne</span><span class="p">(</span><span class="n">a_list</span><span class="p">,</span> <span class="n">b_list</span><span class="p">)</span>
+
+<span class="c1"># a_list が b_list より小さい (&lt;)</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add_lt</span><span class="p">(</span><span class="n">a_list</span><span class="p">,</span> <span class="n">b_list</span><span class="p">)</span>
+
+<span class="c1"># a_list が b_list より小さいか等しい (&lt;=)</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add_le</span><span class="p">(</span><span class="n">a_list</span><span class="p">,</span> <span class="n">b_list</span><span class="p">)</span>
+
+<span class="c1"># a_list が b_list より大きい (&gt;)</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add_gt</span><span class="p">(</span><span class="n">a_list</span><span class="p">,</span> <span class="n">b_list</span><span class="p">)</span>
+
+<span class="c1"># a_list が b_list より大きいか等しい (&gt;=)</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add_ge</span><span class="p">(</span><span class="n">a_list</span><span class="p">,</span> <span class="n">b_list</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="id13">
+<h3>条件リテラル<a class="headerlink" href="#id13" title="この見出しへのパーマリンク">¶</a></h3>
+<p><cite>a</cite> ならば <cite>b</cite> であるという含意はCNFでは <span class="math notranslate nohighlight">\(\neg a \vee b\)</span>
+となる．
+含意の結果が複数リテラルの論理和の場合でも同様に
+<span class="math notranslate nohighlight">\(\neg a \vee b_1 \vee b_2 \vee b_3 \cdots\)</span>
+となるが，論理積の場合には
+<span class="math notranslate nohighlight">\((\neg a \vee b_1) \wedge (\neg a \vee b_2) \wedge (\neg a \vee b_3) \wedge \cdots\)</span>
+のように退屈な式を延々と作らなければならない．
+そこで，このような場合にコーディングの手間を減らす工夫として
+<cite>条件リテラル(conditional literal)</cite> という仕組みを導入している．
+<cite>条件リテラル</cite> はソルバ内部に保存される <cite>SatLiteral</cite> のリスト
+であり，以下のようにセット・クリアできる．</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># conditional literal のセット</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">set_conditional_literals</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="o">~</span><span class="n">x3</span><span class="p">)</span>
+
+<span class="o">....</span>
+
+<span class="c1"># conditional literal のクリア</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">clear_conditional_literals</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><cite>conditional literal</cite> がセットされている場合には，
+すべての <cite>SatSolver.add_clause()</cite> において，
+<cite>conditional literal</cite> の否定のリテラルが追加される．</p>
+<p>例えば以下のコード</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">solver</span><span class="o">.</span><span class="n">clear_conditional_literals</span><span class="p">()</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">set_conditional_literals</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="o">~</span><span class="n">x2</span><span class="p">)</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add_clause</span><span class="p">(</span><span class="n">y1</span><span class="p">)</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add_clause</span><span class="p">(</span><span class="o">~</span><span class="n">y2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>は以下のコードと同様の結果となる．</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">solver</span><span class="o">.</span><span class="n">clear_conditional_literals</span><span class="p">()</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add_clause</span><span class="p">(</span><span class="o">~</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y1</span><span class="p">)</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add_clause</span><span class="p">(</span><span class="o">~</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="o">~</span><span class="n">y2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><cite>SatSolver</cite> が生成された時点では <cite>conditional literal</cite> は空である．
+<cite>conditional literal</cite> は場合によっては思いがけないエラーを引き起こすの
+でこまめにクリアしておいたほうがよい．</p>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">SatSolver クラス</a><ul>
+<li><a class="reference internal" href="#id2">SatSolver の生成</a><ul>
+<li><a class="reference internal" href="#id3">デフォルトタイプの詳細</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id4">変数の生成</a></li>
+<li><a class="reference internal" href="#id5">節の生成</a></li>
+<li><a class="reference internal" href="#sat">SAT問題を解く</a><ul>
+<li><a class="reference internal" href="#id6">解の取得</a></li>
+<li><a class="reference internal" href="#id7">矛盾の原因の解析</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id8">高度な使い方</a><ul>
+<li><a class="reference internal" href="#tseitin">Tseitin の符号化</a></li>
+<li><a class="reference internal" href="#id9">加算</a></li>
+<li><a class="reference internal" href="#id10">カウント</a></li>
+<li><a class="reference internal" href="#id11">カウント系の条件</a></li>
+<li><a class="reference internal" href="#id12">比較演算</a></li>
+<li><a class="reference internal" href="#id13">条件リテラル</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="SatModel.html"
+                          title="前の章へ">SatModel クラス</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/classes/SatSolver.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="SatModel.html" title="SatModel クラス"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pysat 1.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="classes.html" >クラス一覧</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">SatSolver クラス</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2023, Yusuke Matsunaga(松永 裕介).
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    </div>
+  </body>
+</html>

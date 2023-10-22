@@ -1,0 +1,217 @@
+
+<!DOCTYPE html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>pysat の取得，ビルド，インストール &#8212; pysat 1.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="pysat の使い方" href="sat_tutorial.html" />
+    <link rel="prev" title="Welcome to pysat&#39;s documentation!" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="sat_tutorial.html" title="pysat の使い方"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to pysat&#39;s documentation!"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pysat 1.0 ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">pysat の取得，ビルド，インストール</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="pysat">
+<h1>pysat の取得，ビルド，インストール<a class="headerlink" href="#pysat" title="この見出しへのパーマリンク">¶</a></h1>
+<section id="id1">
+<h2>レポジトリの取得<a class="headerlink" href="#id1" title="この見出しへのパーマリンク">¶</a></h2>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>--recurse-submodule<span class="w"> </span>https://github.com/yusuke-matsunaga/pysat.git
+</pre></div>
+</div>
+<p>でソース一式を取得する(<cite>$</cite> はコマンドプロンプト．以下同様)．
+<cite>--recurse-submodule</cite> オプションを付けなかった場合には clone ごリポジ
+トリに移動して以下のコマンドを実行する．</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>git<span class="w"> </span>submodule<span class="w"> </span>init
+$<span class="w"> </span>git<span class="w"> </span>submodule<span class="w"> </span>update
+</pre></div>
+</div>
+</section>
+<section id="id2">
+<h2>ビルドディレクトリの作成<a class="headerlink" href="#id2" title="この見出しへのパーマリンク">¶</a></h2>
+<p>ソースディレクトリの中にビルドディレクトリを作ることもできるが，
+git で管理されたリポジトリ内に作業用ファイルを作るのは美しくないので
+別にビルドディレクトリを用意する．
+このビルドディレクトリを ${BUILD_DIR} と表すことにする．
+ソースディレクトリ直下で以下の操作を行う．</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>./mk_builddir.sh<span class="w"> </span><span class="si">${</span><span class="nv">BUILD_DIR</span><span class="si">}</span>
+</pre></div>
+</div>
+<p>${BUILD_DIR} が存在しない場合には新規に作成する．
+実行してよいか尋ねるプロンプトが出るので <cite>yes</cite> か <cite>no</cite> を選択する．</p>
+<p>既存のディレクトリを再利用する場合はすでにある設定ファイルを置き換えて
+よいかを尋ねるプロンプトが出るので同様に <cite>yes</cite> か <cite>no</cite> を選択する．
+結果として ${BUILD_DIR} の下に <cite>boot.sh</cite> と <cite>boot-opt.sh</cite> という2つの
+ファイルが生成される．
+逆に言うと <cite>mk_builddir.sh</cite> の仕事は ${BUILD_DIR} を作成してこの2つの
+ファイルをコピーすることである．</p>
+</section>
+<section id="id3">
+<h2>ビルド環境の設定<a class="headerlink" href="#id3" title="この見出しへのパーマリンク">¶</a></h2>
+<p>${BUILD_DIR} に移動してビルドシステム用の設定を行う．
+具体的には以下の操作を行う．</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">$cd</span><span class="w"> </span><span class="si">${</span><span class="nv">BUILD_DIR</span><span class="si">}</span>
+$./boot.sh
+</pre></div>
+</div>
+<p>すると内部で <cite>cmake</cite> を起動して必要な処理を行う．
+なお，いくつか設定可能がオプションがある．
+また，<cite>bison</cite> のようなサードパーティ製のソフトウェアを使う場合に
+パス指定が必要な場合がある．
+これらの設定はそのサイトにローカルな設定なので <cite>boot.sh</cite> は変更せずに
+<cite>boot-opt.sh</cite> に記述しておく.
+<cite>boot.sh</cite> は実行時にに <cite>boot-opt.sh</cite> ファイルの内容を読み込んで設定に
+反映させる仕組みになっている．</p>
+<p>具体的には <cite>cmake</cite> へ与えるオプションは <cite>options</cite> というシェル変数に記
+述する．
+複数のオプションを記述することを考えて以下のような形式にしておくと
+管理がやりやすい．</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">options</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$options</span><span class="s2"> -DXXX=YYY&quot;</span>
+</pre></div>
+</div>
+<p>この例では <cite>cmake</cite> が用いる <cite>CMakeLists.txt</cite> 中の変数 <cite>XXX</cite> に値 <cite>YYY</cite>
+を割り当てる操作を行っている．</p>
+<p>環境変数は通常のシェルスクリプト同様に設定する．</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;/usr/local/opt/bison/bin:</span><span class="nv">$PATH</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<p>この例では実行パスの先頭に <cite>/usr/local/opt/bison/bin</cite> を追加している．
+実際，Mac の場合，デフォルトで入っている yacc(bison) のバージョンが
+古いのでポートで最新の bison をインストールする必要があり，
+このような記述が必要となる．</p>
+</section>
+<section id="id4">
+<h2>ビルド<a class="headerlink" href="#id4" title="この見出しへのパーマリンク">¶</a></h2>
+<p><cite>ninja</cite> が使用可能なら <cite>ninja</cite> をそうでないなら <cite>make</cite> を用いてビルド
+を行う．
+どのビルドシステムが使用されているかは <cite>boot.sh</cite> 実行時のメッセージを
+確認すればよい．</p>
+</section>
+<section id="id5">
+<h2>インストール<a class="headerlink" href="#id5" title="この見出しへのパーマリンク">¶</a></h2>
+<p>ビルドが終了したら <cite>ninja install</cite> もしくは <cite>make install</cite> でビルド結
+果のインストールが行われる．
+とは言ってもユーザ権限でシステム領域にファイルを書き込むことはできない
+ので，
+現在は ${BUILD_DIR}/stage というディレクトリの下にファイルをコピーして
+いるだけである．
+具体的には以下のファイルが生成される(unixの場合)．</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="si">${</span><span class="nv">BUILD_DIR</span><span class="si">}</span>/stage/bin/pysat
+<span class="w">                  </span>/lib/python<span class="o">{</span>version<span class="o">}</span>/site-packages/ymsat.so
+</pre></div>
+</div>
+<p><cite>python{version}</cite> は実際には使用している python のバージョンが入る．
+(例えば python3.9 など)．</p>
+<p>このうち，<cite>ymsat.so</cite> は動的ライブラリで Python の拡張モジュールとなっ
+ている．
+<cite>pysat</cite> はあらかじめ <cite>ymsat.so</cite> を組み込んだ python インタプリタである．
+通常の <cite>python3</cite> と同様に使うことができる．</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">pysat の取得，ビルド，インストール</a><ul>
+<li><a class="reference internal" href="#id1">レポジトリの取得</a></li>
+<li><a class="reference internal" href="#id2">ビルドディレクトリの作成</a></li>
+<li><a class="reference internal" href="#id3">ビルド環境の設定</a></li>
+<li><a class="reference internal" href="#id4">ビルド</a></li>
+<li><a class="reference internal" href="#id5">インストール</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="index.html"
+                          title="前の章へ">Welcome to pysat's documentation!</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="sat_tutorial.html"
+                          title="次の章へ">pysat の使い方</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/how_to_build.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="sat_tutorial.html" title="pysat の使い方"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to pysat&#39;s documentation!"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pysat 1.0 ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">pysat の取得，ビルド，インストール</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2023, Yusuke Matsunaga(松永 裕介).
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    </div>
+  </body>
+</html>
