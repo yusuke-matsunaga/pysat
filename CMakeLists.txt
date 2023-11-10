@@ -15,7 +15,9 @@ set ( YM_VERSION_MINOR 0 )
 set ( YM_VERSION ${YM_VERSION_MAJOR}.${YM_VERSION_MINOR} )
 project ( pysat VERSION "${YM_VERSION}" )
 
-set ( CMAKE_INSTALL_PREFIX "${PROJECT_BINARY_DIR}/stage" )
+if ( NOT CMAKE_INSTALL_PREFIX )
+  set ( CMAKE_INSTALL_PREFIX "${PROJECT_BINARY_DIR}/stage" )
+endif ()
 
 
 # ===================================================================
